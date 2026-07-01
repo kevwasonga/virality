@@ -51,8 +51,9 @@
 
 ## Active Session Status
 - **Current Feature**: Feature 1 — Landing Page & Lead Capture Widget
-- **Current Step**: Step 1 — DB Initialisation / Migrations for Feature 1 (Define Prisma Schema & PostgreSQL connection)
+- **Current Step**: Step 3 — Implement Feature 1 API Layer (NestJS endpoints for lead capture)
 - **Stack**: NestJS / Next.js / TailwindCSS / PostgreSQL / Prisma
+
 
 ---
 
