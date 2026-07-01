@@ -1,0 +1,13 @@
+{
+  "name": "virality-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:api": "npm run start:dev --prefix api",
+    "dev:ui": "npm run dev --prefix ui",
+    "build:api": "npm run build --prefix api",
+    "build:ui": "npm run build --prefix ui",
+    "prisma:generate": "npm run prisma generate --prefix api",
+    "prisma:migrate": "npm run prisma migrate dev --prefix api"
+  }
+}
