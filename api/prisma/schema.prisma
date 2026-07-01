@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum LeadSource {
+  WEBSITE
+  WHATSAPP
+  CAREER_SCANNER
+  REFERRAL
+  TIKTOK
+  FACEBOOK
+  GOOGLE
+  DIRECT
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  APPLIED
+  ADMITTED
+  LOST
+}
+
+enum LeadPriority {
+  NURTURE
+  WARM
+  HOT
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+model growth_leads {
+  id                    String        @id @default(cuid())
+  full_name             String        @db.VarChar(255)
+  phone                 String        @db.VarChar(50)
+  email                 String?       @db.VarChar(255)
+  interest              String?       @db.VarChar(255)
+  preferred_course_code String?       @db.VarChar(50)
+  preferred_campus      String?       @db.VarChar(100)
+  preferred_study_mode  String?       @db.VarChar(50)
+  source                LeadSource
+  status                LeadStatus    @default(NEW)
+  score                 Int           @default(0)
+  priority              LeadPriority  @default(NURTURE)
+  campaign_id           String?       @db.VarChar(255)
+  referral_code         String?       @db.VarChar(255)
+  created_at            DateTime      @default(now()) @db.Timestamp()
+  updated_at            DateTime      @default(now()) @updatedAt @db.Timestamp()
+
+  campaign              growth_campaigns? @relation(fields: [campaign_id], references: [id])
+
+  @@index([phone])
+  @@index([status])
+  @@index([source])
+  @@index([campaign_id])
+}
+
+model growth_campaigns {
+  id                 String         @id @default(cuid())
+  name               String         @db.VarChar(255)
+  channel            String         @db.VarChar(50)
+  target_course_code String?        @db.VarChar(50)
+  objective          String         @db.VarChar(255)
+  budget             Decimal?       @db.Decimal(12, 2)
+  status             CampaignStatus @default(DRAFT)
+  created_at         DateTime       @default(now()) @db.Timestamp()
+  updated_at         DateTime       @default(now()) @updatedAt @db.Timestamp()
+
+  leads              growth_leads[]
+}
+
+model growth_referrals {
+  id             String   @id @default(cuid())
+  referral_code  String   @unique @db.VarChar(50)
+  referrer_name  String?  @db.VarChar(255)
+  referrer_phone String   @db.VarChar(50)
+  referral_link  String   @db.VarChar(500)
+  share_message  String?  @db.Text
+  clicks         Int      @default(0)
+  leads          Int      @default(0)
+  created_at     DateTime @default(now()) @db.Timestamp()
+}
